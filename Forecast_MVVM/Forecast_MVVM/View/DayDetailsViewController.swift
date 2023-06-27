@@ -23,14 +23,25 @@ class DayDetailsViewController: UIViewController {
     //MARK: - View Lifecyle
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Conform to the TBVS Protocol
         viewModel = DayDetailViewModel(delegate: self)
+        // Conform to the TableViewDataSource Protocol
         dayForcastTableView.dataSource = self
     }
-}
+    
+    private func configureView() {
+        let currentDay = viewModel.days[0]
+        self.cityNameLabel.text = viewModel.forcastData?.cityName ?? "No City Found"
+        currentDescriptionLabel.text = currentDay.weather.description
+        currentTempLabel.text = "\(currentDay.temp)F"
+        currentLowLabel.text = "\(currentDay.lowTemp)F"
+        currentHighLabel.text = "\(currentDay.highTemp)F"
+        dayForcastTableView.reloadData()
+    }
+} // End
 
 //MARK: - Extenstions
 extension DayDetailsViewController: UITableViewDelegate, UITableViewDataSource {
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return viewModel.days.count
     }
@@ -44,16 +55,9 @@ extension DayDetailsViewController: UITableViewDelegate, UITableViewDataSource {
 }
 
 extension DayDetailsViewController: DayDetailViewDelegate {
-    func updateViews() {
+    func forecastDataLoadedSuccessfully() {
         DispatchQueue.main.async { [weak self] in
-            guard let self = self else {return}
-            let currentDay = self.viewModel.days[0]
-            self.cityNameLabel.text = self.viewModel.forcastData?.cityName ?? "No City Found"
-            self.currentDescriptionLabel.text = currentDay.weather.description
-            self.currentTempLabel.text = "\(currentDay.temp)F"
-            self.currentLowLabel.text = "\(currentDay.lowTemp)F"
-            self.currentHighLabel.text = "\(currentDay.highTemp)F"
-            self.dayForcastTableView.reloadData()
+            self?.configureView()
         }
     }
 }

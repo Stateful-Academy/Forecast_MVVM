@@ -8,7 +8,7 @@
 import Foundation
 
 protocol DayDetailViewDelegate: DayDetailsViewController {
-    func updateViews()
+    func forecastDataLoadedSuccessfully()
 }
 
 class DayDetailViewModel {
@@ -31,7 +31,7 @@ class DayDetailViewModel {
             switch result {
             case .success(let forcastData):
                 self.forcastData = forcastData
-                self.delegate?.updateViews()
+                self.delegate?.forecastDataLoadedSuccessfully()
             case .failure(let error):
                 print("Error fetching the data!", error.errorDescription!)
             }

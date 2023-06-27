@@ -18,35 +18,35 @@ class DayDetailsViewController: UIViewController {
     @IBOutlet weak var currentDescriptionLabel: UILabel!
     
     //MARK: - Properties
+    /// MVC
     var forcastData: TopLevelDictionary?
     var days: [Day] = []
+    /// MVC
     
     //MARK: - View Lifecyle
     override func viewDidLoad() {
         super.viewDidLoad()
         // Conform to the TBVS Protocols
-        dayForcastTableView.delegate = self
         dayForcastTableView.dataSource = self
         
-        NetworkingContoller.fetchDays { result in
-            
+        /// MVC
+        NetworkingController.fetchDays { result in
             switch result {
             case .success(let forcastData):
                 self.forcastData = forcastData
                 self.days = forcastData.days
                 DispatchQueue.main.async {
-                    self.updateViews()
+                    self.configureView()
                     self.dayForcastTableView.reloadData()
                 }
             case .failure(let error):
                 print("Error fetching the data!", error.errorDescription!)
             }
-            
         }
+        /// MVC
     }
     
-    func updateViews() {
-        
+    func configureView() {
         let currentDay = days[0]
         cityNameLabel.text = forcastData?.cityName ?? "No City Found"
         currentDescriptionLabel.text = currentDay.weather.description

@@ -23,9 +23,8 @@ class DayDetailsViewController: UIViewController {
     //MARK: - View Lifecyle
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Conform to the TBVS Protocols
+        // Conform to the TBVS Protocol
         viewModel = DayDetailViewModel(delegate: self)
-        dayForcastTableView.delegate = self
         dayForcastTableView.dataSource = self
     }
 }
